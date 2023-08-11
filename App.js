@@ -7,22 +7,6 @@ import CreateScreen from './src/screens/Create';
 import EditScreen from './src/screens/Edit';
 import LoginScreen from './src/screens/Login';
 import SignupScreen from './src/screens/Signup';
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA8H3JHd15emX6ArS1XAtXOtzd2hKWMcOA",
-  authDomain: "react-native-note-app-21e28.firebaseapp.com",
-  projectId: "react-native-note-app-21e28",
-  storageBucket: "react-native-note-app-21e28.appspot.com",
-  messagingSenderId: "1150969073",
-  appId: "1:1150969073:web:c98f526b61c051afe13550"
-};
-
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app)
-export const db = getFirestore(app)
 
 const Stack = createNativeStackNavigator();
 
