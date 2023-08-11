@@ -1,4 +1,4 @@
-import { View, StyleSheet, SafeAreaView, Image, Text, TextInput, Pressable } from 'react-native'
+import { View, StyleSheet, SafeAreaView, Image, Text, TextInput, Pressable, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import RoundButton from '../components/common/buttons/RoundButton'
 import FormInput from '../components/form/Input'
@@ -15,9 +15,11 @@ export default function SignupScreen({ navigation }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [age, setAge] = useState('')
+  const [age, setAge] = useState('');
+  const [loader, setLoader] = useState(false)
 
   const handleSignup = async () => {
+    setLoader(true)
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const docRef = await addDoc(collection(db, "users"), {
@@ -27,10 +29,12 @@ export default function SignupScreen({ navigation }) {
         gender,
         uid: userCredential.user.uid
       });
-      showMessage({message: 'Signup successful', type: 'success', duration: 3000})
+      setLoader(false)
+      showMessage({ message: 'Signup successful', type: 'success', duration: 3000 })
     } catch (e) {
       console.error("Error adding document: ", e);
-      showMessage({message: 'Failed!', type: 'danger', duration: 3000})
+      showMessage({ message: 'Failed!', type: 'danger', duration: 3000 })
+      setLoader(false)
     }
   }
 
@@ -38,7 +42,7 @@ export default function SignupScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ paddingHorizontal: 16, marginVertical: 10 }}>
-        <FormInput placeholder='Email Address' onChangeText={(e) => setEmail(e)} />
+        <FormInput placeholder='Email Address' onChangeText={(e) => setEmail(e)} autoCapitalize={'none'} />
         <FormInput placeholder='Password' onChangeText={(e) => setPassword(e)} secureTextEntry />
         <FormInput placeholder='Full Name' onChangeText={(e) => setName(e)} />
         <FormInput placeholder='Age' onChangeText={(e) => setAge(e)} />
@@ -49,8 +53,12 @@ export default function SignupScreen({ navigation }) {
         <RadionInput label='select gender' options={genderOptions} value={gender} onChange={setGender} />
       </View>
 
+      {loader && <ActivityIndicator color={'green'} size={'large'} />}
+
       <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-        <RoundButton onPress={handleSignup} title={'Sign up'} customStyles={{ alignSelf: 'center', marginBottom: 60 }} />
+        {
+          loader === false && <RoundButton onPress={handleSignup} title={'Sign up'} customStyles={{ alignSelf: 'center', marginBottom: 60 }} />
+        }
         <Pressable style={{ marginBottom: 20 }} onPress={() => navigation.navigate("Login")}>
           <Text>
             Already have an account?

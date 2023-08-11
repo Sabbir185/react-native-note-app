@@ -9,7 +9,7 @@ import LoginScreen from './src/screens/Login';
 import SignupScreen from './src/screens/Signup';
 import FlashMessage from "react-native-flash-message";
 import { useEffect, useState } from 'react';
-import { auth, onAuthStateChanged } from './firebase';
+import { auth, onAuthStateChanged, signOut } from './firebase';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +26,10 @@ export default function App() {
   const [loader, setLoader] = useState(true)
   const [user, setUser] = useState(null);
 
+  // useEffect(()=>{
+  //   signOut(auth)
+  // },[])
+
   useEffect(() => {
     const authSubscription = onAuthStateChanged(auth, (resUser) => {
       if (resUser) {
@@ -39,6 +43,9 @@ export default function App() {
   }, [])
 
   if (loader) {
+    setTimeout(() => {
+      setLoader(false)
+    }, 5000);
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator color={'blue'} size={'large'} />
