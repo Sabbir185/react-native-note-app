@@ -1,10 +1,17 @@
-import { View, Text } from 'react-native'
+import { View, Text, TextInput, StyleSheet } from 'react-native'
 import React from 'react'
 
-export default function FormInput() {
+export default function FormInput({placeholder, secureTextEntry}) {
   return (
-    <View>
-      <Text>FormInput</Text>
-    </View>
+    <TextInput placeholder={placeholder} secureTextEntry={secureTextEntry} style={styles.input} />
   )
 }
+
+const styles = StyleSheet.create({
+  input: {
+    height: 48,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    marginBottom: 25
+  }
+})
