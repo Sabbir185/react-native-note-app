@@ -1,9 +1,12 @@
 import { View, StyleSheet, SafeAreaView, Image, Text, TextInput, Pressable } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import RoundButton from '../components/common/buttons/RoundButton'
 import FormInput from '../components/form/Input'
 
+
 export default function LoginScreen({navigation}) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   return (
     <SafeAreaView style={styles.container}>
@@ -16,8 +19,8 @@ export default function LoginScreen({navigation}) {
       </Text>
 
       <View style={{ paddingHorizontal: 16, marginVertical: 25 }}>
-        <FormInput placeholder='Email Address' />
-        <FormInput placeholder='Password' secureTextEntry />
+        <FormInput placeholder='Email Address' onChangeText={(e) => setEmail(e)} />
+        <FormInput placeholder='Password' secureTextEntry onChangeText={(e) => setPassword(e)} />
       </View>
 
       <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>

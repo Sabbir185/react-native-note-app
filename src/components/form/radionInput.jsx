@@ -1,9 +1,10 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import React from 'react'
 
-export default function RadionInput({value, options=[], onChange}) {
+export default function RadionInput({ label, value, options = [], onChange }) {
     return (
         <>
+            <Text style={styles.label}>{label}</Text>
             {
                 options?.map((option) => {
                     const selected = option === value;
@@ -31,6 +32,7 @@ export default function RadionInput({value, options=[], onChange}) {
 
 
 const styles = StyleSheet.create({
+    label: {textTransform: 'capitalize', marginVertical: 15},
     radionContainer: {
         flexDirection: 'row',
         alignItems: 'center',

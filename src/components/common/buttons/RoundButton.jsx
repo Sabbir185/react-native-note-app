@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function RoundButton({title, onPress, customStyles}) {
   return (
-    <TouchableOpacity style={[styles.button, customStyles]}>
+    <TouchableOpacity onPress={onPress} style={[styles.button, customStyles]}>
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>
   )

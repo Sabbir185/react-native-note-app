@@ -3,28 +3,46 @@ import React, { useState } from 'react'
 import RoundButton from '../components/common/buttons/RoundButton'
 import FormInput from '../components/form/Input'
 import RadionInput from '../components/form/radionInput'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
+const auth = getAuth()
 const genderOptions = ['male', 'female']
+
 
 export default function SignupScreen({ navigation }) {
   const [gender, setGender] = useState()
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [age, setAge] = useState('')
+
+  const handleSignup = () => {
+    createUserWithEmailAndPassword(auth, email, password).then(userCredential => {
+      const user = userCredential.user;
+      console.log(user);
+
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ paddingHorizontal: 16, marginVertical: 25 }}>
-        <FormInput placeholder='Email Address' />
-        <FormInput placeholder='Password' secureTextEntry />
-        <FormInput placeholder='Full Name' />
-        <FormInput placeholder='Age' />
+      <View style={{ paddingHorizontal: 16, marginVertical: 10 }}>
+        <FormInput placeholder='Email Address' onChangeText={(e) => setEmail(e)} />
+        <FormInput placeholder='Password' onChangeText={(e) => setPassword(e)} secureTextEntry />
+        <FormInput placeholder='Full Name' onChangeText={(e) => setName(e)} />
+        <FormInput placeholder='Age' onChangeText={(e) => setAge(e)} />
       </View>
 
       {/* radio button */}
       <View style={{ paddingHorizontal: 16 }}>
-        <RadionInput options={genderOptions} value={gender} onChange={setGender} />
+        <RadionInput label='select gender' options={genderOptions} value={gender} onChange={setGender} />
       </View>
 
       <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-        <RoundButton title={'Signup'} customStyles={{ alignSelf: 'center', marginBottom: 60 }} />
+        <RoundButton onPress={handleSignup} title={'Sign up'} customStyles={{ alignSelf: 'center', marginBottom: 60 }} />
         <Pressable style={{ marginBottom: 20 }} onPress={() => navigation.navigate("Login")}>
           <Text>
             Already have an account?
@@ -39,7 +57,7 @@ export default function SignupScreen({ navigation }) {
 
 
 const styles = StyleSheet.create({
-  container: { flex: 1, marginTop: 50 },
+  container: { flex: 1, marginTop: 20 },
   neverForgotTest: { fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginTop: 25 },
   input: {
     height: 48,
