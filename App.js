@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './src/screens/Home';
@@ -7,6 +7,9 @@ import CreateScreen from './src/screens/Create';
 import EditScreen from './src/screens/Edit';
 import LoginScreen from './src/screens/Login';
 import SignupScreen from './src/screens/Signup';
+import FlashMessage from "react-native-flash-message";
+import { useEffect, useState } from 'react';
+import { auth, onAuthStateChanged } from './firebase';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +23,28 @@ const appTheme = {
 
 
 export default function App() {
-  const user = false;
+  const [loader, setLoader] = useState(true)
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const authSubscription = onAuthStateChanged(auth, (resUser) => {
+      if (resUser) {
+        setUser(resUser)
+        setLoader(false)
+      } else {
+        setUser(null)
+      }
+    })
+    return authSubscription
+  }, [])
+
+  if (loader) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator color={'blue'} size={'large'} />
+      </View>
+    )
+  }
 
   return (
     <NavigationContainer theme={appTheme}>
@@ -28,17 +52,20 @@ export default function App() {
         {
           user ?
             <>
-              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Home" options={{ headerShown: false }}>
+                {(props) => <HomeScreen {...props} user={user} />}
+              </Stack.Screen>
               <Stack.Screen name="Create" component={CreateScreen} />
               <Stack.Screen name="Edit" component={EditScreen} />
             </>
             :
             <>
-              <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
+              <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
               <Stack.Screen name="Signup" component={SignupScreen} />
             </>
         }
       </Stack.Navigator>
+      <FlashMessage position="top" />
     </NavigationContainer>
   );
 }

@@ -5,6 +5,7 @@ import FormInput from '../components/form/Input'
 import RadionInput from '../components/form/radionInput'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { addDoc, auth, collection, db } from '../../firebase'
+import { showMessage } from "react-native-flash-message";
 
 const genderOptions = ['male', 'female']
 
@@ -26,9 +27,10 @@ export default function SignupScreen({ navigation }) {
         gender,
         uid: userCredential.user.uid
       });
-      console.log("Document written with ID: ", docRef.id);
+      showMessage({message: 'Signup successful', type: 'success', duration: 3000})
     } catch (e) {
       console.error("Error adding document: ", e);
+      showMessage({message: 'Failed!', type: 'danger', duration: 3000})
     }
   }
 
