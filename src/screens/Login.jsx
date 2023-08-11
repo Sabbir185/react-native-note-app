@@ -7,7 +7,7 @@ import { auth } from '../../firebase'
 import { showMessage } from 'react-native-flash-message'
 
 
-export default function LoginScreen({navigation}) {
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loader, setLoader] = useState(false)
@@ -15,10 +15,10 @@ export default function LoginScreen({navigation}) {
   const handleLogin = () => {
     setLoader(true)
     signInWithEmailAndPassword(auth, email, password).then(() => {
-      showMessage({message: 'Login successful', type: 'success', duration: 3000})
+      showMessage({ message: 'Login successful', type: 'success', duration: 3000 })
       setLoader(false)
     }).catch(errro => {
-      showMessage({message: 'Failed', type: 'danger', duration: 3000})
+      showMessage({ message: 'Failed', type: 'danger', duration: 3000 })
       setLoader(false)
     })
   }
@@ -41,12 +41,12 @@ export default function LoginScreen({navigation}) {
       {loader && <ActivityIndicator color={'green'} size={'large'} />}
 
       <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-        {loader===false && <RoundButton onPress={handleLogin} title={'Login'} customStyles={{ alignSelf: 'center', marginBottom: 60 }} />}
+        {loader === false && <RoundButton onPress={handleLogin} title={'Login'} customStyles={{ alignSelf: 'center', marginBottom: 60 }} />}
         <Pressable style={{ marginBottom: 20 }} onPress={() => navigation.navigate("Signup")}>
           <Text>
             Don't have an account?
             {" "}
-            <Text style={{color: 'green', fontWeight: 'bold'}}>Signup</Text>
+            <Text style={{ color: 'green', fontWeight: 'bold' }}>Signup</Text>
           </Text>
         </Pressable>
       </View>
