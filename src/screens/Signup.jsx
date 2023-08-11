@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import RoundButton from '../components/common/buttons/RoundButton'
 import FormInput from '../components/form/Input'
 import RadionInput from '../components/form/radionInput'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { addDoc, auth, collection, db } from '../../firebase'
 
-const auth = getAuth()
 const genderOptions = ['male', 'female']
 
 
@@ -16,14 +16,20 @@ export default function SignupScreen({ navigation }) {
   const [password, setPassword] = useState('')
   const [age, setAge] = useState('')
 
-  const handleSignup = () => {
-    createUserWithEmailAndPassword(auth, email, password).then(userCredential => {
-      const user = userCredential.user;
-      console.log(user);
-
-    }).catch(err => {
-      console.log(err);
-    })
+  const handleSignup = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const docRef = await addDoc(collection(db, "users"), {
+        name,
+        email,
+        age,
+        gender,
+        uid: userCredential.user.uid
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   }
 
 

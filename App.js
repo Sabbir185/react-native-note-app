@@ -8,6 +8,8 @@ import EditScreen from './src/screens/Edit';
 import LoginScreen from './src/screens/Login';
 import SignupScreen from './src/screens/Signup';
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA8H3JHd15emX6ArS1XAtXOtzd2hKWMcOA",
@@ -19,6 +21,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app)
+export const db = getFirestore(app)
 
 const Stack = createNativeStackNavigator();
 
